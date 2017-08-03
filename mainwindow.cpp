@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QPrinter>
+#include <QCPDialog.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -14,7 +15,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    cpd = new CPD(new QPrinter, Q_NULLPTR);
-    cpd->show();
-    ui->label->setText(cpd->information());
+    QCPDialog dialog(new QPrinter, Q_NULLPTR);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    ui->label->setText(dialog.information());
 }
