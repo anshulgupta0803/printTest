@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QCPDialog.h>
 #include <QPrintDialog>
+#include <memory>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -17,20 +18,18 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    QPrinter *printer = new QPrinter(QPrinter::HighResolution);
+    QPrinter printer(QPrinter::HighResolution);
+    //auto dialog = std::make_unique<QCPDialog>(&printer);
+    QCPDialog *dialog = new QCPDialog(&printer);
+    dialog->setWindowTitle("Print Document");
 
-    QCPDialog dialog(printer, Q_NULLPTR);
-//    QPrintDialog dialog(printer, Q_NULLPTR);
-
-    dialog.setWindowTitle("Print Document");
-
-    if (dialog.exec() != QDialog::Accepted) {
+    if (dialog->exec() != QDialog::Accepted) {
         ui->label->setText("Print Cancelled");
         return;
     }
 
     QPainter painter;
-    painter.begin(printer);
+    painter.begin(&printer);
 
     QRect rect({100, 100}, QSize{500, 500});
     QString text{"Hello World"};
