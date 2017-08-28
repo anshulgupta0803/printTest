@@ -3,7 +3,6 @@
 #include <QPrinter>
 #include <QPainter>
 #include <QCPDialog.h>
-#include <QPrintDialog>
 #include <memory>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -18,9 +17,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    QPrinter printer(QPrinter::HighResolution);
-    //auto dialog = std::make_unique<QCPDialog>(&printer);
-    QCPDialog *dialog = new QCPDialog(&printer);
+    QPrinter printer;
+    auto dialog = std::make_unique<QCPDialog>(&printer);
+    
     dialog->setWindowTitle("Print Document");
 
     if (dialog->exec() != QDialog::Accepted) {
